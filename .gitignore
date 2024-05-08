@@ -1,35 +1,34 @@
-# Prerequisites
-*.d
+# Ignore Visual Studio files
+.vs/
+*.vscode/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Ignore build outputs
+x64/
+x86/
+Debug/
+Release/
+ipch/
+*.pdb
+*.idb
 
-# Precompiled Headers
-*.gch
-*.pch
+# Ignore IntelliSense files
+*.sdf
+*.opensdf
+*.suo
+*.sdf
+*.sdf
+*.suo
+*.idb
+*.ipdb
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# IDE Specifics
-*.vs
+# Ignore generated files by CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Makefile
+install_manifest.txt
