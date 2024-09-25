@@ -1,20 +1,43 @@
-// AeroAlert.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <string>
+#include "httplib.h"
+#include "json.hpp"
 
-int main()
-{
-    std::cout << "Hello World!\n";
+using json = nlohmann::json;
+
+int main() {
+    std::string city;
+    std::cout << "Enter city name: ";
+    std::getline(std::cin, city); // Get user input
+
+    // Create a client for OpenWeatherMap API
+    httplib::Client cli("api.openweathermap.org", 80);
+    std::string url = "/data/2.5/weather?q=" + city + "&appid=f193257d5cc4c0740688c601c9229a0b";
+
+    // Make a GET request to fetch weather data for London
+    auto res = cli.Get(url.c_str());
+
+    // Check if the response is valid
+    if (res && res->status == 200) {
+        // Parse the JSON response
+        json weather_data = json::parse(res->body);
+
+        // Extract relevant information
+        std::string country = weather_data["sys"]["country"];
+        double temp_kelvin = weather_data["main"]["temp"];
+        double temp_celsius = temp_kelvin - 273.15; // Convert to Celsius
+        double humidity = weather_data["main"]["humidity"];
+        std::string weather_description = weather_data["weather"][0]["description"];
+
+        // Output friendly weather information
+        std::cout << "Weather in " << city << ", " << country << ":\n";
+        std::cout << "Temperature: " << temp_celsius << "°C\n";
+        std::cout << "Humidity: " << humidity << "%\n";
+        std::cout << "Conditions: " << weather_description << "\n";
+    }
+    else {
+        std::cout << "Error: " << (res ? std::to_string(res->status) : "No response") << std::endl;
+    }
+
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
